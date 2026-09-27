@@ -1,0 +1,9 @@
+{
+  "theme": "moonstone",
+  "accentColor": "#438459",
+  "interfaceFontFamily": "Saira,方正盈利体简繁",
+  "textFontFamily": "Saira,HarmonyOS Sans SC",
+  "monospaceFontFamily": "JetBrains Mono",
+  "baseFontSizeAction": true,
+  "nativeMenus": false
+}
