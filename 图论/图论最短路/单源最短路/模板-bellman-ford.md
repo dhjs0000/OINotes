@@ -1,69 +1,45 @@
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
-const int maxn = 1e6 + 7;
-const int INF = 1e9;
-int dis[maxn];
-struct Edge{
-	int v; // 终点 
-	int w; // 边权 
+const int INF = 0x3f3f3f3f; // 最大值
+const int MAXN = 1e6+5;     // 数据范围: 最大n
+int n,m,s;
+struct Edge { // 边结构体
+    int v, w; // v:目标点，w:边权
 };
-vector<Edge> G[maxn];
-int n, m, s;
-void add_edge(int u, int v, int w)
-{
-	G[u].push_back({v, w});
-	return ;
-} 
-void bellman_ford()
-{
-	for (int i = 1; i <= n; i++)
-	{
-		dis[i] = INF;
-	}
-	dis[s] = 0;
-	for (int i = 1; i <= n - 1; i++) // 一条路径最多添加n - 1条
-	{
-		bool flag = 0;
-		for (int j = 1; j <= n; j++) // 枚举所有起点 
-		{
-			for (int k = 0; k < G[j].size(); k++) // 枚举起点能到的点，对应边的终点 
-			{
-				int v = G[j][k].v;
-				int w = G[j][k].w;
-				if (dis[v] > dis[j] + w)
-				{
-					dis[v] = dis[j] + w;
-					flag = 1;
-				}
-			}
-		}
-		if (flag == 0) // 说明没有路径被松弛
-		{
-			return ;
-		} 
-	} 
-	return ;
+vector<Edge> G[MAXN];  // 邻接表
+int dis[MAXN];         // 定义dis[i]为从s到i的最短路径权之和
+
+void bellman_ford(int s) {
+    memset(dis,0x3f,sizeof(dis)); // 初始化dis为最大值
+    dis[s]=0;                     // 从s到s的最短路径权之和
+    for(int i=1;i<=n-1;i++) { // 一条最短路径最多包含n-1条边，松弛n-1轮就够了
+        bool flag=0;          // 记录本轮是否发生过松弛
+        for(int u=1;u<=n;u++) { // 枚举所有起点
+            if(dis[u]==INF) continue;   // 还没到达的点无法继续松弛，跳过
+            for(const auto &e : G[u]) { // 遍历从u出发的每一条边
+                int v = e.v;
+                int w = e.w;
+                if (dis[v] > dis[u] + w) {
+                    dis[v] = dis[u] + w;
+                    flag = 1; // 标记本轮发生了松弛
+                }
+            }
+        }
+        if(!flag) return; // 一整轮都没有松弛发生，说明已经收敛，提前退出
+    }
 }
-int main()
-{
-	cin >> n >> m >> s;
-	for (int i = 1; i <= m; i++)
-	{
-		int u, v, w;
-		cin >> u >> v >> w;
-		add_edge(u, v, w); 
-	}
-	bellman_ford();
-	for (int i = 1; i <= n; i++)
-	{
-		if (dis[i] >= INF)
-		{
-			cout << (1 << 31) - 1 << ' ';
-		}
-		else cout << dis[i] << ' ';
-	}
-	return 0;
+
+int main(){
+    cin>>n>>m>>s;
+    for(int i=1;i<=m;i++){
+        int u,v,w;
+        cin>>u>>v>>w;
+        G[u].push_back({v,w}); // vector邻接表存图
+    }
+    bellman_ford(s);
+    for(int i=1;i<=n;i++)
+        cout << (dis[i]==INF ? INT_MAX : dis[i]) << ' '; // 题目要求无解输出INT_MAX
 }
 ```
 [[推论-Bellman-ford最短路]]

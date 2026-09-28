@@ -1,69 +1,51 @@
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
-const int maxn = 1e6 + 7;
-int n, m, s;
-struct Node // w最小的，返回所在的v 
-{
-	int v, w;
-	// 手写比较器
-	bool operator <(const Node &A) const   // 从大到小排列 （优先队列--最后一个） 
-	{
-		// w左边那个   A.w 右边的那个w 
-		return w > A.w;	
-	} 
+const int INF = 0x3f3f3f3f; // 最大值
+const int MAXN = 1e6+5;     // 数据范围: 最大n
+int n,m,s;
+struct Edge { // 点结构体
+    int v, w; // v:目标点，w:边权
+    bool operator <(const Node &a) const {
+        return w > a.w; // 使得priority_queue反转变为小根堆
+    }
 };
+vector<Edge> G[MAXN];  // 邻接表
+int dis[MAXN];         // 定义dis[i]为从s到i的最短路径权之和
+bool vis[MAXN];        // vis[i]是否已经被访问过
 
-vector<Node> G[maxn];
-int dis[maxn]; // dis[i]表示起点s到i的最短距离 
-bool vis[maxn]; // 标记哪些点已经选中了，作为永久点vis[i] =1 说明i被选中了 
-void add_edge(int u, int v, int w)
-{
-	G[u].push_back({v, w});
+void dijkstra(int s) {
+    memset(dis,0x3f,sizeof(dis)); // 初始化dis为最大值
+    memset(vis,0,sizeof(vis));    // 初始化vis数组（在多次调用dijkstra时很有用）
+    dis[s]=0;              // 从s到s的最短路径权之和
+    priority_queue<Edge> q;// 优先队列（在函数内定义的话，在多次调用dijkstra时很有用）
+    q.push({s, 0});        // 将起点推入优先队列
+    while(!q.empty()) {    // 一直持续运行到堆变空
+        int u = q.top().v; q.pop(); // 取出队首
+        if (vis[u]) continue;       // 如果已经访问过就跳过
+        vis[u] = 1;                 // 设置当前点已经访问过了
+        for(const auto &e : G[u]) { // 遍历从u开始的每一条边
+            int v = e.v;
+            int w = e.w;
+            if (dis[v] > dis[u] + w) {
+                dis[v] = dis[u] + w;
+                q.push({v,dis[v]}); // 将下一条边加入队列
+            }
+        }
+    }
 }
 
-priority_queue<Node> Q; 
-void dijkstra(int s)
-{
-	for (int i = 1; i <= n; i++)
-	{
-		dis[i] = INT_MAX;	
-	} 
-	dis[s] = 0;
-	Q.push({s, dis[s]});
-	while (!Q.empty())
-	{
-		int id = Q.top().v; 
-		Q.pop();
-		if (vis[id] == 1) continue; // 不允许再更新 
-		vis[id] = 1;// 设置为永久点
-		for (int i = 0; i < G[id].size(); i++) 
-		{
-			int v = G[id][i].v;
-			int w = G[id][i].w;
-			if (dis[v] > dis[id] + w)
-			{
-				dis[v] = dis[id] + w;
-				Q.push({v, dis[v]});
-			}
-		}
-	}
+int main(){
+    cin>>n>>m>>s;
+    for(int i=1;i<=m;i++){
+        int u,v,w;
+        cin>>u>>v>>w;
+        G[u].push_back({v,w}); // vector邻接表存图
+    }
+    dijkstra(s);
+    for(int i=1;i<=n;i++)
+        cout << (dis[i]==INF ? INT_MAX : dis[i]) << ' '; // 题目要求无解输出INT_MAX
 }
-int main()
-{
-	cin >> n >> m >> s;
-	for (int i = 1; i <= m; i++)
-	{
-		int u, v, w;
-		cin >> u >> v >> w;
-		add_edge(u, v, w);
-	}
-	dijkstra(s);
-	for (int i = 1; i <= n; i++) // 不能初始值为0 
-	{
-		cout << dis[i] << ' '; 
-	}
-	return 0;
-}
+
 ```
 [[推论-dijkstra最短路]]
