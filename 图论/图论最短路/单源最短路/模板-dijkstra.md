@@ -4,9 +4,9 @@ using namespace std;
 const int INF = 0x3f3f3f3f; // 最大值
 const int MAXN = 1e6+5;     // 数据范围: 最大n
 int n,m,s;
-struct Edge { // 点结构体
+struct Edge { // 边结构体
     int v, w; // v:目标点，w:边权
-    bool operator <(const Node &a) const {
+    bool operator <(const Edge &a) const {
         return w > a.w; // 使得priority_queue反转变为小根堆
     }
 };
