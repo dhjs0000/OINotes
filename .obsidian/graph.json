@@ -22,17 +22,31 @@
       }
     },
     {
+      "query": "file:根论",
+      "color": {
+        "a": 1,
+        "rgb": 0
+      }
+    },
+    {
       "query": "file:主论",
       "color": {
         "a": 1,
-        "rgb": 7185152
+        "rgb": 7050010
+      }
+    },
+    {
+      "query": "file:次论",
+      "color": {
+        "a": 1,
+        "rgb": 7058176
       }
     },
     {
       "query": "file:推论",
       "color": {
         "a": 1,
-        "rgb": 65280
+        "rgb": 1829632
       }
     },
     {
@@ -40,13 +54,6 @@
       "color": {
         "a": 1,
         "rgb": 14570208
-      }
-    },
-    {
-      "query": "file:根论",
-      "color": {
-        "a": 1,
-        "rgb": 6073814
       }
     }
   ],
@@ -56,10 +63,10 @@
   "nodeSizeMultiplier": 0.999367088607595,
   "lineSizeMultiplier": 2.39493670886076,
   "collapse-forces": true,
-  "centerStrength": 1,
+  "centerStrength": 0.504673836566489,
   "repelStrength": 20,
   "linkStrength": 1,
   "linkDistance": 30,
-  "scale": 1.0534979423868254,
-  "close": false
+  "scale": 0.23299244451665618,
+  "close": true
 }
